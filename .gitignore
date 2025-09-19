@@ -1,0 +1,92 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleasesPublic/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vsp
+*.vsps
+*.pdb
+*.cache
+*.opendb
+*.dbmdl
+*.sdf
+*.ide
+*.psess
+*.vspx
+*.log
+*.vsix
+*.vsixmanifest
+
+# Rider files
+.idea/
+
+# DotCover files
+*.dotCover
+
+# TFS files
+*.vspscc
+*.vssscc
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# User-specific files
+*.rsuser
+*.suo
+*.userprefs
+*.user
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+*.nuspec
+.packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# Web publish files
+*.Publish.xml
+*.azurePubxml
+
+# Others
+*.cache
+*.bak
+*.tmp
+*~
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# Log files
+*.log
+
