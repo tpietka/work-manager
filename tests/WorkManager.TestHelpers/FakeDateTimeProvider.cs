@@ -4,20 +4,16 @@ namespace WorkManager.TestHelpers;
 
 public class FakeDateTimeProvider : IDateTimeProvider
 {
-    public DateTime Now { get; set; } = new DateTime(2025, 9, 9, 10, 0, 0);
-    public DateTime UtcNow { get; set; } = new DateTime(2025, 9, 9, 10, 0, 0, DateTimeKind.Utc);
-    public DateTimeOffset OffsetNow { get; set; } = new DateTimeOffset(2025, 9, 9, 10, 0, 0, TimeSpan.Zero);
-    public DateTimeOffset OffsetUtcNow { get; set; } = new DateTimeOffset(2025, 9, 9, 10, 0, 0, TimeSpan.Zero);
+    public DateTime Now { get; }
+    public DateTime UtcNow => Now.ToLocalTime();
+    public DateOnly Today => DateOnly.FromDateTime(Now);
 
-    public void SetUtcNow(DateTime utcDateTime)
+    public FakeDateTimeProvider(DateTime dateTime)
     {
-        UtcNow = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
-        OffsetUtcNow = new DateTimeOffset(utcDateTime, TimeSpan.Zero);
+        Now = dateTime;
     }
 
-    public void SetFixedTime(int year, int month, int day, int hour = 12, int minute = 0, int second = 0)
-    {
-        var fixedTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
-        SetUtcNow(fixedTime);
+    public FakeDateTimeProvider() : this(new DateTime(2025, 9, 9, 10, 0, 0)) 
+    { 
     }
 }
