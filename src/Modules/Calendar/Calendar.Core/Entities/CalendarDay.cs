@@ -1,4 +1,6 @@
-﻿namespace Calendar.Core.Entities;
+﻿using System.Globalization;
+
+namespace Calendar.Core.Entities;
 internal abstract class CalendarDay
 {
     protected CalendarDay(string name, DateOnly date)
@@ -12,5 +14,17 @@ internal abstract class CalendarDay
     public override string ToString()
     {
         return Name;
+    }
+    public bool IsSameWeek(CalendarDay other)
+    {
+        DateTime date1 = Date.ToDateTime(TimeOnly.MinValue);
+        DateTime date2 = other.Date.ToDateTime(TimeOnly.MinValue);
+
+        var week1 = ISOWeek.GetWeekOfYear(date1);
+        var week2 = ISOWeek.GetWeekOfYear(date2);
+        var year1 = ISOWeek.GetYear(date1);
+        var year2 = ISOWeek.GetYear(date2);
+
+        return week1 == week2 && year1 == year2;
     }
 }
