@@ -15,6 +15,7 @@ internal abstract class CalendarDay
     {
         return Name;
     }
+    public bool IsWeekend => Date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
     public bool IsSameWeek(CalendarDay other)
     {
         DateTime date1 = Date.ToDateTime(TimeOnly.MinValue);

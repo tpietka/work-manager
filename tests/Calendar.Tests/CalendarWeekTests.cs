@@ -117,4 +117,29 @@ public class CalendarWeekTests
         });
         Assert.Equal("Can't add day from different week", exception.Message);
     }
+
+    [Fact]
+    public void AddFreeDayOnWeekend_ShouldNotThrowException()
+    {
+        //Arrange
+        var week = new CalendarWeek();
+        var freeDay1 = new FreeDay(new DateOnly(2025, 9, 27));
+
+        //Act
+        week.AddDay(freeDay1);
+
+        //Assert
+        Assert.Equal(1, week.DaysCount);
+    }
+
+    [Fact]
+    public void CreateWorkDayOnWeekend_ShouldThrowException()
+    {
+        //Arrange & Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+        {
+            var freeDay1 = new RemoteWorkDay(new DateOnly(2025, 9, 27));
+        });
+        Assert.Equal("Can't create workday on weekend", exception.Message);
+    }
 }
