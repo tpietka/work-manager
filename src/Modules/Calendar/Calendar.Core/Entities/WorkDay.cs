@@ -10,7 +10,7 @@ internal abstract class WorkDay : CalendarDay
         }
     }
 
-    internal bool InvalidDayType()
+    internal virtual bool InvalidDayType()
     {
         return IsWeekend;
     }

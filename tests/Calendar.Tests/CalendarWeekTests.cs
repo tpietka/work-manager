@@ -20,7 +20,7 @@ public class CalendarWeekTests
     {
         //Arrange
         var week = new CalendarWeek();
-        var day = new RemoteWorkDay(_dtProvider.Today);
+        var day = new RemoteWorkDay(new DateOnly(2025, 12, 31));
 
         //Act
         week.AddDay(day);
@@ -34,8 +34,8 @@ public class CalendarWeekTests
     {
         //Arrange
         var week = new CalendarWeek();
-        var remoteDay = new RemoteWorkDay(_dtProvider.Today);
-        var officeDay = new OfficeWorkDay(_dtProvider.Today.AddDays(1));
+        var remoteDay = new RemoteWorkDay(new DateOnly(2025, 09, 22));
+        var officeDay = new OfficeWorkDay(new DateOnly(2025, 09, 22).AddDays(1));
 
         //Act
         week.AddDay(remoteDay);
@@ -51,8 +51,8 @@ public class CalendarWeekTests
     {
         //Arrange
         var week = new CalendarWeek();
-        var remoteDay = new RemoteWorkDay(_dtProvider.Today);
-        var officeDay = new OfficeWorkDay(_dtProvider.Today);
+        var remoteDay = new RemoteWorkDay(new DateOnly(2025, 09, 22));
+        var officeDay = new OfficeWorkDay(new DateOnly(2025, 09, 22));
 
         //Act
         week.AddDay(remoteDay);
@@ -70,8 +70,8 @@ public class CalendarWeekTests
     {
         //Arrange
         var week = new CalendarWeek();
-        var remoteDay = new RemoteWorkDay(_dtProvider.Today);
-        var officeDay = new OfficeWorkDay(_dtProvider.Today.AddDays(8));
+        var remoteDay = new RemoteWorkDay(new DateOnly(2025, 09, 22));
+        var officeDay = new OfficeWorkDay(new DateOnly(2025, 09, 22).AddDays(8));
 
         //Act
         week.AddDay(remoteDay);
@@ -141,5 +141,27 @@ public class CalendarWeekTests
             var freeDay1 = new RemoteWorkDay(new DateOnly(2025, 9, 27));
         });
         Assert.Equal("Can't create workday on weekend", exception.Message);
+    }
+
+    [Fact]
+    public void CreateWorkOnFreeDayOnWeekend_ShouldNotThrowException()
+    {
+        //Arrange & Act & Assert
+        var freeDay1 = new RemoteWorkOnFreeDay(new DateOnly(2025, 9, 27));
+    }
+
+    [Fact]
+    public void CreateRemoteWorkWeek_Has5WorkDaysAndTwoFreeDays()
+    {
+        //Arrange & Act
+        var week = CalendarWeek.CreateRemoteWorkWeek(new DateOnly(2025, 09, 24));
+
+        //Assert
+        Assert.Equal(5, week.WorkDaysCount);
+        Assert.Equal(2, week.FreeDaysCount);
+        Assert.Equal(new DateOnly(2025, 09, 22), week.Days.First().Date);
+        Assert.Equal(new DateOnly(2025, 09, 28), week.Days.Last().Date);
+        Assert.IsType<RemoteWorkDay>(week.Days.First());
+        Assert.IsType<FreeDay>(week.Days.Last());
     }
 }
