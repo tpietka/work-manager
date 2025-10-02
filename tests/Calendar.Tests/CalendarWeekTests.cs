@@ -147,7 +147,14 @@ public class CalendarWeekTests
     public void CreateWorkOnFreeDayOnWeekend_ShouldNotThrowException()
     {
         //Arrange & Act & Assert
-        var freeDay1 = new RemoteWorkOnFreeDay(new DateOnly(2025, 9, 27));
+        var exception = Record.Exception(() =>
+        {
+            var freeDay1 = new RemoteWorkOnFreeDay(new DateOnly(2025, 9, 27));
+            Assert.Equal(27, freeDay1.Date.Day);
+        });
+
+        //Assert
+        Assert.Null(exception);
     }
 
     [Fact]
