@@ -199,9 +199,9 @@ public class CalendarWeekTests
     }
 
     [Theory]
-    [InlineData(2, "2025-09-24", "2025-09-30")]
-    [InlineData(3, "2025-09-24", "2025-09-26", "2025-09-19")]
-    public void CreateCustomRemoteWorkWeekWithDifferentWeekDates_ShouldThrowException(int expectedDaysCount, params string[] stringDates)
+    [InlineData("2025-09-24", "2025-09-30")]
+    [InlineData("2025-09-24", "2025-09-26", "2025-09-19")]
+    public void CreateCustomRemoteWorkWeekWithDifferentWeekDates_ShouldThrowException(params string[] stringDates)
     {
         var days = stringDates.Select(DateOnly.Parse);
 
