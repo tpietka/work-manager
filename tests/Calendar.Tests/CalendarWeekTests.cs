@@ -58,11 +58,18 @@ public class CalendarWeekTests
         week.AddDay(remoteDay);
 
         //Assert
-        var exception = Assert.Throws<InvalidOperationException>(() =>
+        Assert.Equal(1, week.RemoteWorkDaysCount);
+        Assert.Equal(0, week.OfficeWorkDaysCount);
+
+        var exception = Record.Exception(() =>
         {
             week.AddDay(officeDay);
         });
-        Assert.Equal("Day with same date already exists in a week", exception.Message);
+
+        Assert.Null(exception);
+        Assert.Equal(0, week.RemoteWorkDaysCount);
+        Assert.Equal(1, week.OfficeWorkDaysCount);
+        //Assert.Equal("Day with same date already exists in a week", exception.Message);
     }
 
     [Fact]
@@ -164,11 +171,44 @@ public class CalendarWeekTests
         var week = CalendarWeek.CreateRemoteWorkWeek(new DateOnly(2025, 09, 24));
 
         //Assert
-        Assert.Equal(5, week.WorkDaysCount);
-        Assert.Equal(2, week.FreeDaysCount);
-        Assert.Equal(new DateOnly(2025, 09, 22), week.Days.First().Date);
-        Assert.Equal(new DateOnly(2025, 09, 28), week.Days.Last().Date);
-        Assert.IsType<RemoteWorkDay>(week.Days.First());
-        Assert.IsType<FreeDay>(week.Days.Last());
+        Assert.Multiple(
+            () => Assert.Equal(5, week.WorkDaysCount),
+            () => Assert.Equal(2, week.FreeDaysCount),
+            () => Assert.Equal(new DateOnly(2025, 09, 22), week.Days.First().Date),
+            () => Assert.Equal(new DateOnly(2025, 09, 28), week.Days.Last().Date),
+            () => Assert.IsType<RemoteWorkDay>(week.Days.First()),
+            () => Assert.IsType<FreeDay>(week.Days.Last()));
+    }
+
+    [Theory]
+    [InlineData(2, "2025-09-24", "2025-09-25")]
+    [InlineData(3, "2025-09-24", "2025-09-26", "2025-09-23")]
+    public void CreateCustomRemoteWorkWeek_HasFullWeekWithGivenRemoteWorkDays(int expectedDaysCount, params string[] stringDates)
+    {
+        var days = stringDates.Select(DateOnly.Parse);
+
+        var week = CalendarWeek.CreateCustomRemoteWorkWeek(days);
+
+        Assert.Multiple(
+            () => Assert.Equal(5, week.WorkDaysCount),
+            () => Assert.Equal(expectedDaysCount, week.RemoteWorkDaysCount),
+            () => Assert.Equal(2, week.FreeDaysCount),
+            () => Assert.Equal(5-expectedDaysCount, week.OfficeWorkDaysCount),
+            () => Assert.Equal(7, week.DaysCount),
+            () => Assert.IsType<FreeDay>(week.Days.Last()));
+    }
+
+    [Theory]
+    [InlineData(2, "2025-09-24", "2025-09-30")]
+    [InlineData(3, "2025-09-24", "2025-09-26", "2025-09-19")]
+    public void CreateCustomRemoteWorkWeekWithDifferentWeekDates_ShouldThrowException(int expectedDaysCount, params string[] stringDates)
+    {
+        var days = stringDates.Select(DateOnly.Parse);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+        {
+            var week = CalendarWeek.CreateCustomRemoteWorkWeek(days);
+        });
+        Assert.Equal("Can't add day from different week", exception.Message);
     }
 }
