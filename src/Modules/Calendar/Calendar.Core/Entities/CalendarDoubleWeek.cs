@@ -46,11 +46,11 @@ internal class CalendarDoubleWeek
         {
             if (firstWeek.Includes(day))
             {
-                firstWeek.AddDay(new RemoteWorkDay(day));
+                firstWeek.ModifyDay(new RemoteWorkDay(day));
             }
             else if (secondWeek.Includes(day))
             {
-                secondWeek.AddDay(new RemoteWorkDay(day));
+                secondWeek.ModifyDay(new RemoteWorkDay(day));
             }
             else
             {

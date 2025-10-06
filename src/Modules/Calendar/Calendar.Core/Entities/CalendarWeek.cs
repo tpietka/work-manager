@@ -20,8 +20,8 @@ internal class CalendarWeek
         {
             week.AddDay(new RemoteWorkDay(startOfWeek.AddDays(i)));
         }
-        week.AddDay(new FreeDay(startOfWeek.AddDays(5)));
-        week.AddDay(new FreeDay(startOfWeek.AddDays(6)));
+        AddFreeDays(startOfWeek, week);
+
         return week;
     }
 
@@ -33,9 +33,14 @@ internal class CalendarWeek
         {
             week.AddDay(new OfficeWorkDay(startOfWeek.AddDays(i)));
         }
+        AddFreeDays(startOfWeek, week);
+        return week;
+    }
+
+    private static void AddFreeDays(DateOnly startOfWeek, CalendarWeek week)
+    {
         week.AddDay(new FreeDay(startOfWeek.AddDays(5)));
         week.AddDay(new FreeDay(startOfWeek.AddDays(6)));
-        return week;
     }
 
     public static CalendarWeek CreateCustomRemoteWorkWeek(params IEnumerable<DateOnly> days)
@@ -46,11 +51,9 @@ internal class CalendarWeek
 
         foreach (var day in days)
         {
-            week.AddDay(new RemoteWorkDay(day));
+            week.ModifyDay(new RemoteWorkDay(day));
         }
 
-        week.AddDay(new FreeDay(startOfWeek.AddDays(5)));
-        week.AddDay(new FreeDay(startOfWeek.AddDays(6)));
         return week;
     }
 
@@ -58,13 +61,27 @@ internal class CalendarWeek
     {
         if (_days.Select(x => x.Date).Contains(day.Date))
         {
-            _days.RemoveWhere(d => d.Date == day.Date);
+            throw new InvalidOperationException("Day with same date already exists in a week");
         }
 
+        ValidateSameWeek(day);
+
+        _days.Add(day);
+    }
+
+    private void ValidateSameWeek(CalendarDay day)
+    {
         if (_days.Count > 0 && !_days.First().IsSameWeek(day))
         {
             throw new InvalidOperationException("Can't add day from different week");
         }
+    }
+
+    internal void ModifyDay(CalendarDay day)
+    {
+        _days.RemoveWhere(d => d.Date == day.Date);
+
+        ValidateSameWeek(day);
 
         _days.Add(day);
     }

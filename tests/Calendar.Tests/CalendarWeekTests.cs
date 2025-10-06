@@ -61,16 +61,40 @@ public class CalendarWeekTests
         Assert.Equal(1, week.RemoteWorkDaysCount);
         Assert.Equal(0, week.OfficeWorkDaysCount);
 
-        var exception = Record.Exception(() =>
+        var exception = Assert.Throws<InvalidOperationException>(() =>
         {
             week.AddDay(officeDay);
+        });
+
+        Assert.Equal("Day with same date already exists in a week", exception.Message);
+    }
+
+
+    [Fact]
+    public void ModifyTwoDaysWithSameDate_ShouldNotThrowException()
+    {
+        //Arrange
+        var week = new CalendarWeek();
+        var remoteDay = new RemoteWorkDay(new DateOnly(2025, 09, 22));
+        var officeDay = new OfficeWorkDay(new DateOnly(2025, 09, 22));
+
+        //Act
+        week.AddDay(remoteDay);
+
+        //Assert
+        Assert.Equal(1, week.RemoteWorkDaysCount);
+        Assert.Equal(0, week.OfficeWorkDaysCount);
+
+        var exception = Record.Exception(() =>
+        {
+            week.ModifyDay(officeDay);
         });
 
         Assert.Null(exception);
         Assert.Equal(0, week.RemoteWorkDaysCount);
         Assert.Equal(1, week.OfficeWorkDaysCount);
-        //Assert.Equal("Day with same date already exists in a week", exception.Message);
     }
+
 
     [Fact]
     public void AddTwoDaysFromDifferentWeek_ShouldThrowException()
