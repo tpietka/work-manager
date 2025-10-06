@@ -21,6 +21,18 @@ internal abstract class CalendarDay
         DateTime date1 = Date.ToDateTime(TimeOnly.MinValue);
         DateTime date2 = other.Date.ToDateTime(TimeOnly.MinValue);
 
+        return AreDatesFromSameWeek(date1, date2);
+    }
+
+    public bool IsSameWeek(DateOnly other)
+    {
+        DateTime date1 = Date.ToDateTime(TimeOnly.MinValue);
+        DateTime date2 = other.ToDateTime(TimeOnly.MinValue);
+        return AreDatesFromSameWeek(date1, date2);
+    }
+
+    private static bool AreDatesFromSameWeek(DateTime date1, DateTime date2)
+    {
         var week1 = ISOWeek.GetWeekOfYear(date1);
         var week2 = ISOWeek.GetWeekOfYear(date2);
         var year1 = ISOWeek.GetYear(date1);

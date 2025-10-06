@@ -38,7 +38,7 @@ internal class CalendarWeek
         return week;
     }
 
-    public static CalendarWeek CreateCustomRemoteWorkWeek(IEnumerable<DateOnly> days)
+    public static CalendarWeek CreateCustomRemoteWorkWeek(params IEnumerable<DateOnly> days)
     {
         var firstDay = days.FirstOrDefault();
         var startOfWeek = firstDay.AddDays(-(int)firstDay.DayOfWeek + 1);
@@ -67,5 +67,20 @@ internal class CalendarWeek
         }
 
         _days.Add(day);
+    }
+
+    internal bool Includes(CalendarDay day)
+    {
+        return _days.First().IsSameWeek(day);
+    }
+
+    internal bool Includes(DateOnly day)
+    {
+        return _days.First().IsSameWeek(day);
+    }
+
+    internal DateOnly FirstWeekDate()
+    {
+        return _days.First().Date;
     }
 }
