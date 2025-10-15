@@ -1,4 +1,6 @@
-﻿namespace Calendar.Core.Entities;
+﻿using Microsoft.VisualBasic;
+
+namespace Calendar.Core.Entities;
 internal class CalendarWeek
 {
     public IEnumerable<CalendarDay> Days => _days;
@@ -94,6 +96,16 @@ internal class CalendarWeek
     internal bool Includes(DateOnly day)
     {
         return _days.First().IsSameWeek(day);
+    }
+
+    internal bool IsDifferentWeek(CalendarWeek other)
+    {
+        return !_days.First().IsSameWeek(other.FirstDay());
+    }
+
+    internal CalendarDay FirstDay()
+    {
+        return _days.First();
     }
 
     internal DateOnly FirstWeekDate()

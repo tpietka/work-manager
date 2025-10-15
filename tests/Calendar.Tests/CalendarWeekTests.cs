@@ -235,4 +235,13 @@ public class CalendarWeekTests
         });
         Assert.Equal("Can't add day from different week", exception.Message);
     }
+
+    [Fact]
+    public void CheckTwoWeeksAreNotTheSameYearWeek()
+    {
+        var week1 = CalendarWeek.CreateOfficeWorkWeek(new DateOnly(2025, 10, 14));
+        var week2 = CalendarWeek.CreateRemoteWorkWeek(new DateOnly(2025, 10, 15));
+
+        Assert.False(week1.IsDifferentWeek(week2));
+    }
 }

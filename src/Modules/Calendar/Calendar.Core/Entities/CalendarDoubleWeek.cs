@@ -9,7 +9,7 @@ internal class CalendarDoubleWeek
     public CalendarWeek FirstWeek => _firstWeek;
     public CalendarWeek SecondWeek => _secondWeek;
 
-    public CalendarDoubleWeek(CalendarWeek firstWeek, CalendarWeek secondWeek)
+    private CalendarDoubleWeek(CalendarWeek firstWeek, CalendarWeek secondWeek)
     {
         (_firstWeek, _secondWeek) = (firstWeek, secondWeek);
     }
@@ -42,7 +42,7 @@ internal class CalendarDoubleWeek
 
         remoteWorkDates = remoteWorkDates.OrderBy(x => x).ToList();
 
-        foreach(var day in remoteWorkDates)
+        foreach (var day in remoteWorkDates)
         {
             if (firstWeek.Includes(day))
             {
