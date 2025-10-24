@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Calendar.Core.ValueObjects;
+using System.Globalization;
 
 namespace Calendar.Core.Entities;
 internal abstract class CalendarDay
@@ -8,6 +9,7 @@ internal abstract class CalendarDay
         Name = name;
         Date = date;
     }
+    public CalendarDayId Id { get; set; }
     public DateOnly Date { get; set; }
     public List<DayEvent> Events { get; set; }
     public string Name { get; }
